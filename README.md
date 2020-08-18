@@ -16,7 +16,7 @@ Použití ve tvém PC
 =
 
 * Aby jsi měl implementaci co nejjednodušší **ukládej všechny standartní Jhv aplikace v souborovém systému na stejnou úroveň**. Například D:\Projekty\_JhvDatabaseApp
-* Aplikaci pojmenuj **Jhv.Jhv.PutGetConnector**
+* Aplikaci pojmenuj **Jhv.PutGetConnector**
 
 ![Image_023](/uploads/2a424215f8e28012f5bbcb646349ea0d/Image_023.png)
 
