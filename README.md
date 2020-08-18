@@ -22,5 +22,5 @@ Použití ve tvém PC
 
 Nastavení PLC
 ==
-* **V PLC je potřeba v HW nastavení povolit PUT/GET komunikaci
-* **DB ke ketrému přistupujete musí být neoptimalizované
+* V PLC je potřeba v HW nastavení povolit PUT/GET komunikaci
+* DB ke ketrému přistupujete musí být neoptimalizované
