@@ -6,15 +6,17 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{08E6509C-2C66-4E0F-9260-AAEB9079873D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>JHV.PutGetConnection</RootNamespace>
-    <AssemblyName>JHV.PutGetConnection</AssemblyName>
+    <RootNamespace>JHV.PutGetConnector</RootNamespace>
+    <AssemblyName>JHV.PutGetConnector</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
+    <Deterministic>false</Deterministic>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>D:\Projekty\_JhvDatabaseApp\Publikace\JHV_PutGetConnector\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -51,7 +53,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Jhv.PutGetConnection.App</StartupObject>
+    <StartupObject>Jhv.PutGetConnector.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Jhv.ico</ApplicationIcon>
@@ -99,6 +101,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="OldSolution\JhvVariablePutGet.cs" />
+    <Compile Include="PutGetConnection.cs" />
     <Compile Include="Tool\Constants.cs" />
     <Compile Include="PutGetVariable.cs" />
     <Compile Include="OldSolution\PutGetPlcDataBlock.cs" />
@@ -136,6 +139,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="JHV.PutGetConnection_TemporaryKey.pfx" />
+    <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -161,4 +165,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="packages\GitInfo.2.1.2\build\GitInfo.targets" Condition="Exists('packages\GitInfo.2.1.2\build\GitInfo.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Tenhle projekt odkazuje na balíčky NuGet, které nejsou v tomhle počítači k dispozici. Když je chcete stáhnout, použijte funkci obnovení balíčků NuGet.  Další informace najdete na adrese http://go.microsoft.com/fwlink/?LinkID=322105. Chybějícím souborem je soubor {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\GitInfo.2.1.2\build\GitInfo.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\GitInfo.2.1.2\build\GitInfo.targets'))" />
+  </Target>
 </Project>

@@ -1,4 +1,5 @@
 ﻿using Jhv.Core.Data;
+using Jhv.PutGetConnector.Tool;
 using JHV.Core.Interfaces;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -81,6 +82,53 @@ namespace Jhv.PutGetConnector
                     break;
             }
         }
+
+        public void DecodeValues(byte[] dbBuffer, int Offset = 0)
+        {
+            switch (Parrent.DataType)
+            {
+                case JhvVariable.DataTypesOption.Boolean:
+                    Parrent.Value = S7.GetBitAt(dbBuffer, Offset, DbxAdress).ToString();
+                    break;                
+                case JhvVariable.DataTypesOption.Byte:
+                    Parrent.Value = S7.GetByteAt(dbBuffer, Offset).ToString();
+                    break;               
+                case JhvVariable.DataTypesOption.String:
+                    Parrent.Value = S7.GetStringAt(dbBuffer, Offset).ToString();
+                    break;
+                case JhvVariable.DataTypesOption.DateTime:
+                    Parrent.Value = S7.GetDateTimeAt(dbBuffer, Offset).ToString();
+                    break;
+                case JhvVariable.DataTypesOption.Int16:
+                    Parrent.Value = S7.GetSIntAt(dbBuffer, Offset).ToString();
+                    break;
+                case JhvVariable.DataTypesOption.Int32:
+                    Parrent.Value = S7.GetIntAt(dbBuffer, Offset).ToString();
+                    break;
+                case JhvVariable.DataTypesOption.Int64:
+                    Parrent.Value = S7.GetDIntAt(dbBuffer, Offset).ToString();
+                    break;
+                case JhvVariable.DataTypesOption.UInt16:
+                    Parrent.Value = S7.GetUSIntAt(dbBuffer, Offset).ToString();
+                    break;
+                case JhvVariable.DataTypesOption.UInt32:
+                    Parrent.Value = S7.GetUIntAt(dbBuffer, Offset).ToString();
+                    break;
+                case JhvVariable.DataTypesOption.UInt64:
+                    Parrent.Value = S7.GetUDIntAt(dbBuffer, Offset).ToString();
+                    break;
+                case JhvVariable.DataTypesOption.Word:
+                    Parrent.Value = S7.GetWordAt(dbBuffer, Offset).ToString();
+                    break;
+                case JhvVariable.DataTypesOption.DWord:
+                    Parrent.Value = S7.GetDWordAt(dbBuffer, Offset).ToString();
+                    break;
+                case JhvVariable.DataTypesOption.Double:
+                    Parrent.Value = S7.GetRealAt(dbBuffer, Offset).ToString();
+                    break;
+            }
+        }
+
         public object Clone()
         {
             return new PutGetVariable(Parrent, DbbAdress, DbxAdress, Lenght);
@@ -101,7 +149,7 @@ namespace Jhv.PutGetConnector
 
         public string ToString(JhvVariable var)
         {
-            return Parrent.Name + " (" + Parrent.DataType + ") = " + Parrent.Value + "\nAdress: " + DbbAdress+"."+DbxAdress;
+            return Parrent.Name + " (" + Parrent.DataType + ") = " + Parrent.Value + "\nAdress: " + DbbAdress + "." + DbxAdress;
         }
     }
 }

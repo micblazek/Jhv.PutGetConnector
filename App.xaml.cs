@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Jhv.PutGetConnection
+namespace Jhv.PutGetConnector
 {
     /// <summary>
     /// Interakční logika pro App.xaml
