@@ -33,6 +33,9 @@ namespace Jhv.PutGetConnector
                 JhvConsole.WriteLine("PutGet not ready", JhvConsole.STATUS_TIP.ALWAYS);
             }
 
+            string s = App.Commit();
+            string s2 = App.CommitDate();
+            string s3 = App.Branch();
         }
     }
 }

@@ -13,5 +13,19 @@ namespace Jhv.PutGetConnector
     /// </summary>
     public partial class App : Application
     {
+        public static string Commit()
+        {
+            return ThisAssembly.Git.Commit;
+        }
+
+        public static string CommitDate()
+        {
+            return ThisAssembly.Git.CommitDate;
+        }
+
+        public static string Branch()
+        {
+            return ThisAssembly.Git.Branch;
+        }
     }
 }
