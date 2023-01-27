@@ -3,6 +3,7 @@ using Jhv.PutGetConnector.Tool;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,6 +36,43 @@ namespace JHV.PutGetConnection
             byte[] dbSpace = new byte[ActVariable.Lenght];
             result = client.ReadArea(S7Consts.S7AreaDB, DbNumber, ActVariable.DbbAdress, ActVariable.Lenght, S7Consts.S7WLByte, dbSpace, ref size);
             ActVariable.DecodeValues(dbSpace);
+        }
+
+        public static void ReadDataBlockFromPLC(S7Client client, int DbNumber, List<PutGetVariable> ActVariable)
+        {
+            int size = 0;
+            int result = 0;
+
+            int StartAdress = Int32.MaxValue;
+            int EndAdress = Int32.MinValue;
+            int LastVariableLenght = 0;
+
+            foreach(PutGetVariable v in ActVariable)
+            {
+                if(v.DbbAdress< StartAdress)
+                    StartAdress = v.DbbAdress;
+                if (v.DbbAdress > EndAdress)
+                {
+                    EndAdress = v.DbbAdress;
+                    LastVariableLenght = v.Lenght;
+                }                   
+            }
+
+            int Lenght = EndAdress + LastVariableLenght - StartAdress;
+
+
+            byte[] dbSpace = new byte[Lenght];
+            result = client.ReadArea(S7Consts.S7AreaDB, DbNumber, StartAdress, Lenght, S7Consts.S7WLByte, dbSpace, ref size);
+            Decode(dbSpace, ActVariable, StartAdress);
+        }
+
+        private static void Decode(byte[] dbSpace, List<PutGetVariable> ActVariable, int Offset = 0)
+        {
+            foreach(PutGetVariable p in ActVariable)
+            {
+                byte[] ActSpace = dbSpace.Skip(p.DbbAdress - Offset).Take(p.Lenght).ToArray();
+                p.DecodeValues(ActSpace);
+            }
         }
 
         //public static void ReadDataBlocksFromPLC(S7Client client, List<PlcDataBlock> dbList, int offsetStar)
