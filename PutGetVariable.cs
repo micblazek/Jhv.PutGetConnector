@@ -1,22 +1,37 @@
 ﻿using Jhv.Core.Data;
 using Jhv.PutGetConnector.Tool;
+using JHV.Core.Abstract;
+using JHV.Core.Data;
 using JHV.Core.Interfaces;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
+using static JHV.Core.Abstract.AJhvVariable;
+using System.Xml.Serialization;
 
 namespace Jhv.PutGetConnector
 {
-    public class PutGetVariable : IJhvVariable, IEquatable<PutGetVariable>, ISerializable, ICloneable
+    public class PutGetVariable : AJhvConnection, IEquatable<PutGetVariable>, ISerializable, ICloneable
     {
-        public JhvVariable Parrent { get; }
-        public JhvVariable.ConnectionTypeOption MyConnectionType { get; }
+        [XmlIgnore]
+        public override AJhvVariable Parrent { get; set; }
+        public override ConnectionTypeOption MyConnectionType { get; set; }
         public int DbbAdress { get; set; }
         public int DbxAdress { get; set; }
         public int Lenght { get; set; }
+
         public PutGetVariable(string Name, string Value, JhvVariable.DataTypesOption DataType, int DbbAdress, int DbxAdress, int Lenght, JhvVariable.ConnectionTypeOption ConnectionType = JhvVariable.ConnectionTypeOption.PutGet)
         {
             Parrent = new JhvVariable(Name, Value, DataType);
+            this.DbbAdress = DbbAdress;
+            this.DbxAdress = DbxAdress;
+            this.Lenght = Lenght;
+            MyConnectionType = ConnectionType;
+            Parrent.Connections.Add(ConnectionType, this);
+        }
+        public PutGetVariable(AJhvVariable Parrent, int DbbAdress, int DbxAdress, int Lenght, JhvVariable.ConnectionTypeOption ConnectionType = JhvVariable.ConnectionTypeOption.PutGet)
+        {
+            this.Parrent = Parrent;
             this.DbbAdress = DbbAdress;
             this.DbxAdress = DbxAdress;
             this.Lenght = Lenght;
@@ -129,7 +144,7 @@ namespace Jhv.PutGetConnector
             }
         }
 
-        public object Clone()
+        public override object Clone()
         {
             return new PutGetVariable(Parrent, DbbAdress, DbxAdress, Lenght);
         }
@@ -144,7 +159,22 @@ namespace Jhv.PutGetConnector
 
         public bool Equals(PutGetVariable other)
         {
-            return ((PutGetVariable)this).Equals(other) && DbbAdress.Equals(other.DbbAdress) && DbxAdress.Equals(DbxAdress);
+            if (other == null)
+                return false;
+
+            return (Parrent).Equals(other.Parrent) && DbbAdress.Equals(other.DbbAdress) && DbbAdress.Equals(other.DbxAdress) && DbbAdress.Equals(other.Lenght);
+        }
+
+        public override bool Equals(AJhvConnection other)
+        {
+            if (other is PutGetVariable)
+            {
+                return Equals(other as PutGetVariable);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public string ToString(JhvVariable var)
