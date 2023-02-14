@@ -47,15 +47,15 @@ namespace JHV.PutGetConnection
             int EndAdress = Int32.MinValue;
             int LastVariableLenght = 0;
 
-            foreach(PutGetVariable v in ActVariable)
+            foreach (PutGetVariable v in ActVariable)
             {
-                if(v.DbbAdress< StartAdress)
+                if (v.DbbAdress < StartAdress)
                     StartAdress = v.DbbAdress;
                 if (v.DbbAdress > EndAdress)
                 {
                     EndAdress = v.DbbAdress;
                     LastVariableLenght = v.Lenght;
-                }                   
+                }
             }
 
             int Lenght = EndAdress + LastVariableLenght - StartAdress;
@@ -68,11 +68,55 @@ namespace JHV.PutGetConnection
 
         private static void Decode(byte[] dbSpace, List<PutGetVariable> ActVariable, int Offset = 0)
         {
-            foreach(PutGetVariable p in ActVariable)
+            foreach (PutGetVariable p in ActVariable)
             {
                 byte[] ActSpace = dbSpace.Skip(p.DbbAdress - Offset).Take(p.Lenght).ToArray();
                 p.DecodeValues(ActSpace);
             }
+        }
+
+        public static void WriteDataToPLC(S7Client client, S7MultiVar writer, PutGetVariable ActVariable, int DbNumber)
+        {
+            int result = 0;
+
+            byte[] dbBuffer = new byte[ActVariable.Lenght];
+
+            if (ActVariable != null && ActVariable.Parrent != null)
+            {
+
+                switch (ActVariable.Parrent.DataType)
+                {
+                    case Core.Abstract.AJhvVariable.DataTypesOption.Double:
+                        //Real
+                        S7.SetRealAt(dbBuffer, 0, (float)Convert.ToDouble(ActVariable.Parrent.Value));
+                        break;
+                    case Core.Abstract.AJhvVariable.DataTypesOption.String:
+                        //String
+                        String s = Convert.ToString(ActVariable.Parrent.Value).Replace(" ", "");
+                        S7.SetStringAt(dbBuffer, 0, s.Length, s);
+                        break;
+                    case Core.Abstract.AJhvVariable.DataTypesOption.Byte:
+                        //Byte
+                        S7.SetByteAt(dbBuffer, 0, Convert.ToByte(ActVariable.Parrent.Value));
+                        break;
+                    case Core.Abstract.AJhvVariable.DataTypesOption.Int32:
+                        //Small int
+                        S7.SetIntAt(dbBuffer, 0, Convert.ToInt16(ActVariable.Parrent.Value));
+                        break;
+                    case Core.Abstract.AJhvVariable.DataTypesOption.Boolean:
+                        S7.SetBitAt(ref dbBuffer, 0, ActVariable.DbxAdress, Convert.ToBoolean(ActVariable.Parrent.Value));
+                        break;
+                    case Core.Abstract.AJhvVariable.DataTypesOption.Int64:
+                        S7.SetLIntAt(dbBuffer, 0, Convert.ToInt16(ActVariable.Parrent.Value));
+                        break;
+                    case Core.Abstract.AJhvVariable.DataTypesOption.DWord:
+                        S7.SetDWordAt(dbBuffer, 0, Convert.ToUInt32(ActVariable.Parrent.Value));
+                        break;
+                }
+
+                writer.Add(S7Consts.S7AreaDB, S7Consts.S7WLByte, DbNumber, ActVariable.DbbAdress, ActVariable.Lenght, ref dbBuffer);
+            }
+            result = writer.Write();
         }
 
         //public static void ReadDataBlocksFromPLC(S7Client client, List<PlcDataBlock> dbList, int offsetStar)
