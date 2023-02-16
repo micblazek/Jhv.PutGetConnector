@@ -102,6 +102,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Convertors\LenghtConvertor.cs" />
+    <Compile Include="Convertors\DBXConvertor.cs" />
+    <Compile Include="Convertors\DBBConvertor.cs" />
     <Compile Include="OldSolution\JhvVariablePutGet.cs" />
     <Compile Include="PutGetConnection.cs" />
     <Compile Include="Tool\Constants.cs" />
