@@ -28,7 +28,7 @@ namespace JHV.PutGetConnection
         //    ReadDataBlockFromPLC(client, db, 0);
         //}
 
-        public static void ReadDataBlockFromPLC(S7Client client, int DbNumber, PutGetVariable ActVariable)
+        public static bool ReadDataBlockFromPLC(S7Client client, int DbNumber, PutGetVariable ActVariable)
         {
             int size = 0;
             int result = 0;
@@ -36,9 +36,10 @@ namespace JHV.PutGetConnection
             byte[] dbSpace = new byte[ActVariable.Lenght];
             result = client.ReadArea(S7Consts.S7AreaDB, DbNumber, ActVariable.DbbAdress, ActVariable.Lenght, S7Consts.S7WLByte, dbSpace, ref size);
             ActVariable.DecodeValues(dbSpace);
+            return result == 0;
         }
 
-        public static void ReadDataBlockFromPLC(S7Client client, int DbNumber, List<PutGetVariable> ActVariable)
+        public static bool ReadDataBlockFromPLC(S7Client client, int DbNumber, List<PutGetVariable> ActVariable)
         {
             int size = 0;
             int result = 0;
@@ -64,6 +65,7 @@ namespace JHV.PutGetConnection
             byte[] dbSpace = new byte[Lenght];
             result = client.ReadArea(S7Consts.S7AreaDB, DbNumber, StartAdress, Lenght, S7Consts.S7WLByte, dbSpace, ref size);
             Decode(dbSpace, ActVariable, StartAdress);
+            return result == 0;
         }
 
         private static void Decode(byte[] dbSpace, List<PutGetVariable> ActVariable, int Offset = 0)

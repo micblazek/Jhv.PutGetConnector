@@ -447,7 +447,7 @@ namespace Jhv.PutGetConnector.Tool
             {
                 int BytesSent = TCPSocket.Send(Buffer, Size, SocketFlags.None);
             }
-            catch
+            catch(Exception)
             {
                 LastError = S7Consts.errTCPDataSend;
                 Close();
