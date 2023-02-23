@@ -27,7 +27,8 @@ namespace Jhv.PutGetConnector
             this.DbxAdress = DbxAdress;
             this.Lenght = Lenght;
             MyConnectionType = ConnectionType;
-            Parrent.Connections.Add(ConnectionType, this);
+            if (!Parrent.Connections.ContainsKey(ConnectionType))
+                Parrent.Connections.Add(ConnectionType, this);
         }
         public PutGetVariable(AJhvVariable Parrent, int DbbAdress, int DbxAdress, int Lenght, JhvVariable.ConnectionTypeOption ConnectionType = JhvVariable.ConnectionTypeOption.PutGet)
         {
@@ -36,7 +37,8 @@ namespace Jhv.PutGetConnector
             this.DbxAdress = DbxAdress;
             this.Lenght = Lenght;
             MyConnectionType = ConnectionType;
-            Parrent.Connections.Add(ConnectionType, this);
+            if (!Parrent.Connections.ContainsKey(ConnectionType))
+                Parrent.Connections.Add(ConnectionType, this);
         }
         public PutGetVariable()
         {
@@ -169,7 +171,7 @@ namespace Jhv.PutGetConnector
         {
             if (other is PutGetVariable)
             {
-                return Equals(other as PutGetVariable);
+                return DbbAdress.Equals((other as PutGetVariable).DbbAdress) && DbxAdress.Equals((other as PutGetVariable).DbxAdress) && Lenght.Equals((other as PutGetVariable).Lenght); 
             }
             else
             {
